@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var path = require('path');
+var zipcodes = require('zipcodes');
 
 
 //connect to db
@@ -97,6 +98,8 @@ app.use(function (req, res, next) {
 // global errors
 
 app.locals.errors = null;
+app.locals.zip = null;
+
 
 
 

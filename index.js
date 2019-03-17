@@ -3,6 +3,8 @@ var express= require('express');
 var router = express.Router();
 
 var Data = require('./models/data');
+var zipcodes = require('zipcodes');
+
 
 
 
@@ -21,8 +23,12 @@ res.render('index',{
 
 router.get('/check', function(req,res){
 
+ var zip = zipcodes.lookup(40010);
+res.render('Check',{
 
-res.render('Check');
+zip: zip.latitude
+	
+});
 });
 
 
@@ -35,6 +41,8 @@ router.post('/submit-check', function(req,res){
  var zipcode = req.body.zipcode;
  var size = req.body.size;
  var bedroom = req.body.bedroom;
+
+
 
  req.checkBody('name', 'Name is required!').notEmpty();
  req.checkBody('zipcode', 'Zipcode is required!').notEmpty();
@@ -50,6 +58,16 @@ router.post('/submit-check', function(req,res){
   }
   else{
 
+  	var zip = zipcodes.lookup(zipcode);
+
+  	var latitude = zip.latitude;
+  	var longitude = zip.longitude;
+
+  	console.log(latitude);
+  	console.log(longitude);
+
+
+
 
   				var data = new Data({
 
@@ -57,6 +75,8 @@ router.post('/submit-check', function(req,res){
   					zipcode: zipcode,
   					size: size,
   					bedroom: bedroom,
+  					lat: latitude,
+  					lon: longitude
   					
   				});
 
