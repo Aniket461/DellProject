@@ -6,6 +6,11 @@ var Data = require('./models/data');
 var zipcodes = require('zipcodes');
 
 
+//python prediction libs
+var spawn = require("child_process").spawn;
+
+
+
 
 
 
@@ -87,6 +92,23 @@ router.post('/submit-check', function(req,res){
   							if(err) console.log(err);
 
   							else{
+
+                  var process = spawn('python',["predict.py"]);
+                  var datainputforpy = JSON.stringify([data.zipcode, data.size, data.bedroom, data.lat, data.lon])
+                  process.stdin.write(datainputforpy)
+                  process.stdin.end()
+                  process.stdout.on('data',function(chunk){
+
+                      var textChunk = chunk.toString('utf8');// buffer to string
+                      //This is our result please print it
+                      console.log(textChunk);
+                  });
+
+                  process.stderr.on('data', (error) => {
+                      
+                      var textChunk = error.toString('utf8');// buffer to string
+                      console.log(textChunk);
+                  });
 
   								req.flash('success', 'Data added successfully. Please wait for prediction');
   								res.redirect('/check');

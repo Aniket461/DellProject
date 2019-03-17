@@ -1,4 +1,4 @@
 module.exports = {
 
-	database: 'mongodb://localhost/DataSet'
+	database: 'mongodb://localhost/db'
 }
